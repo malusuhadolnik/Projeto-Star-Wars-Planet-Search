@@ -3,13 +3,10 @@ import StarWarsContext from '../context/StarWarsContext';
 // import React from 'react';
 
 function Table() {
-  const { data } = useContext(StarWarsContext);
-  console.log(data);
-  // const [search, setSearch] = useState([]);
+  const { search } = useContext(StarWarsContext);
 
   return (
     <div>
-      <h2>renderiza o componente table</h2>
       <table>
         <thead>
           <tr>
@@ -30,7 +27,7 @@ function Table() {
         </thead>
         <tbody>
           {
-            data.map((planet) => (
+            search.map((planet) => (
               <tr key={ planet.name }>
                 <td>{ planet.name }</td>
                 <td>{ planet.rotation_period }</td>

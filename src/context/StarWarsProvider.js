@@ -2,9 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import StarWarsContext from './StarWarsContext';
 
-export default function StarWarsProvider({ children }) {
-  const [data, setData] = useState([]);
-  const [filters, setFilters] = useState({});
+// O Provider é um componente do Context. É por isso que os estados que criamos aqui são chamados com o useContext
+export default function StarWarsProvider({ children }) { // estes são os "estados globais" da aplicação, que serão compartilhados com os componentes filhos
+  const [data, setData] = useState([]); // armazena retorno da API
+  const [filters, setFilters] = useState([]); // irá armazenar quais filtros foram seleciondaos pelo usuário
+  const [search, setSearch] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -18,6 +20,7 @@ export default function StarWarsProvider({ children }) {
           return planet;
         });
         setData(filteredResults);
+        setSearch(filteredResults);
       } catch (error) {
         throw new Error(error.message);
       }
@@ -29,7 +32,9 @@ export default function StarWarsProvider({ children }) {
     data,
     filters,
     setFilters,
-  }), [data, filters, setFilters]);
+    search,
+    setSearch,
+  }), [data, filters, setFilters, search, setSearch]);
 
   return (
     <StarWarsContext.Provider value={ values }>
