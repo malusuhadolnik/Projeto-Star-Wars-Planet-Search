@@ -1,17 +1,16 @@
 import React, { useState, useContext } from 'react';
 import StarWarsContext from '../context/StarWarsContext';
 
-export default function FilterForms() {
+export default function FilterTextForm() {
   const { data, setFilters, setSearch } = useContext(StarWarsContext);
   const [inputs, setInputs] = useState({
     typedText: '',
+    column: 'population',
+    comparison: 'maior que',
+    value: 0,
   });
 
-  // useEffect(() => {
-  //   setSearch(search);
-  // }, [setSearch]);
-
-  const handleChange = ({ target }) => {
+  const handleTypedText = ({ target }) => {
     setInputs({ ...inputs, [target.name]: target.value });
     setFilters(inputs);
 
@@ -36,7 +35,7 @@ export default function FilterForms() {
           name="typedText"
           value={ inputs.typedText }
           id="typedText"
-          onChange={ handleChange }
+          onChange={ handleTypedText }
         />
       </label>
     </form>
