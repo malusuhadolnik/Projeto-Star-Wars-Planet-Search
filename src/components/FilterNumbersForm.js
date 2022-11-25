@@ -14,39 +14,58 @@ export default function FilterNumbersForm() {
     setNumInputs({ ...numInput, [target.name]: target.value });
   };
 
-  const filterData = useCallback(() => {
-    if (selectedFilters.length > 0 && numInput.comparison === 'igual a') {
-      const filtered = data.filter((planet) => {
-        const bools = [];
-        selectedFilters.forEach((singleFilter) => {
-          bools.push(Number(planet[singleFilter.column]) === Number(singleFilter.value));
-        });
-        return bools.every((element) => element);
-        // resolução inspirada na gravação Mentoria de Revisão: Filtros e HOFs para o StarWars
+  // const filterData = useCallback(() => {
+  //   if (selectedFilters.length > 0 && numInput.comparison === 'igual a') {
+  //     const filtered = data.filter((planet) => {
+  //       const bools = [];
+  //       selectedFilters.forEach((singleFilter) => {
+  //         bools.push(Number(planet[singleFilter.column]) === Number(singleFilter.value));
+  //       });
+  //       return bools.every((element) => element); // (element) => element === true, tiramos  a comparação pq vai ficar redundante
+  //       // resolução inspirada na gravação Mentoria de Revisão: Filtros e HOFs para o StarWars
+  //     });
+  //     setSearch(filtered);
+  //   }
+  //   if (selectedFilters.length > 0 && numInput.comparison === 'menor que') {
+  //     const filtered = data.filter((planet) => {
+  //       const bools = [];
+  //       selectedFilters.forEach((singleFilter) => {
+  //         bools.push(Number(planet[singleFilter.column]) < Number(singleFilter.value));
+  //       });
+  //       return bools.every((element) => element);
+  //     });
+  //     setSearch(filtered);
+  //   }
+  //   if (selectedFilters.length > 0 && numInput.comparison === 'maior que') {
+  //     const filtered = data.filter((planet) => {
+  //       const bools = [];
+  //       selectedFilters.forEach((singleFilter) => {
+  //         bools.push(Number(planet[singleFilter.column]) > Number(singleFilter.value));
+  //       });
+  //       return bools.every((element) => element);
+  //     });
+  //     setSearch(filtered);
+  //   }
+  // }, [data, numInput.comparison, selectedFilters, setSearch]);
+
+  const filterNumericData = useCallback(() => {
+    const filter = data.filter((planet) => {
+      const filterResults = selectedFilters.map(({ column, comparison, value }) => {
+        switch (comparison) {
+        case 'maior que':
+          return Number(planet[column]) > Number(value);
+        case 'menor que':
+          return Number(planet[column]) < Number(value);
+        case 'igual a':
+          return Number(planet[column]) === Number(value);
+        default:
+          return true;
+        }
       });
-      setSearch(filtered);
-    }
-    if (selectedFilters.length > 0 && numInput.comparison === 'menor que') {
-      const filtered = data.filter((planet) => {
-        const bools = [];
-        selectedFilters.forEach((singleFilter) => {
-          bools.push(Number(planet[singleFilter.column]) < Number(singleFilter.value));
-        });
-        return bools.every((element) => element);
-      });
-      setSearch(filtered);
-    }
-    if (selectedFilters.length > 0 && numInput.comparison === 'maior que') {
-      const filtered = data.filter((planet) => {
-        const bools = [];
-        selectedFilters.forEach((singleFilter) => {
-          bools.push(Number(planet[singleFilter.column]) > Number(singleFilter.value));
-        });
-        return bools.every((element) => element);
-      });
-      setSearch(filtered);
-    }
-  }, [data, numInput.comparison, selectedFilters, setSearch]);
+      return filterResults.every((element) => element);
+    });
+    return filter;
+  }, [data, selectedFilters]);
 
   const handleClick = () => {
     setSelectedFilters((prevState) => ([
@@ -55,9 +74,13 @@ export default function FilterNumbersForm() {
     ]));
   };
 
+  // useEffect(() => {
+  //   filterData();
+  // }, [filterData]);
+
   useEffect(() => {
-    filterData();
-  }, [filterData]);
+    setSearch(filterNumericData());
+  }, [filterNumericData, setSearch]);
 
   return (
     <form>
