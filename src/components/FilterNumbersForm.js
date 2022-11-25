@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import StarWarsContext from '../context/StarWarsContext';
 
 export default function FilterNumbersForm() {
@@ -14,50 +14,58 @@ export default function FilterNumbersForm() {
     setNumInputs({ ...numInput, [target.name]: target.value });
   };
 
-  const filterData = () => {
-    console.log(selectedFilters);
-    let filtered = [];
-
-    switch (numInput.comparison) {
-    case 'menor que':
-      filtered = data.filter((planet) => { // resolução inspirada na gravação Mentoria de Revisão: Filtros e HOFs para o StarWars
+  const filterData = useCallback(() => {
+    if (selectedFilters.length > 0 && numInput.comparison === 'igual a') {
+      const filtered = data.filter((planet) => {
+        const bools = [];
+        selectedFilters.forEach((singleFilter) => {
+          bools.push(Number(planet[singleFilter.column]) === Number(singleFilter.value));
+        });
+        return bools.every((element) => element);
+        // resolução inspirada na gravação Mentoria de Revisão: Filtros e HOFs para o StarWars
+      });
+      setSearch(filtered);
+    }
+    if (selectedFilters.length > 0 && numInput.comparison === 'menor que') {
+      const filtered = data.filter((planet) => {
         const bools = [];
         selectedFilters.forEach((singleFilter) => {
           bools.push(Number(planet[singleFilter.column]) < Number(singleFilter.value));
         });
-        console.log(bools);
-        console.log('entrou no case menor que');
         return bools.every((element) => element);
       });
-      break;
-    default:
-      filtered = data;
-      break;
+      setSearch(filtered);
     }
-    console.log('chamou a func filterData');
-    // console.log(filtered);
-    return filtered;
-  };
+    if (selectedFilters.length > 0 && numInput.comparison === 'maior que') {
+      const filtered = data.filter((planet) => {
+        const bools = [];
+        selectedFilters.forEach((singleFilter) => {
+          bools.push(Number(planet[singleFilter.column]) > Number(singleFilter.value));
+        });
+        return bools.every((element) => element);
+      });
+      setSearch(filtered);
+    }
+  }, [data, numInput.comparison, selectedFilters, setSearch]);
 
   const handleClick = () => {
     setSelectedFilters((prevState) => ([
       ...prevState,
       numInput,
     ]));
-    console.log(selectedFilters);
 
     // setSearch(filterData());
 
-    setNumInputs({
-      column: 'population',
-      comparison: 'maior que',
-      value: 0,
-    });
+    // setNumInputs({
+    //   column: 'population',
+    //   comparison: 'maior que',
+    //   value: 0,
+    // });
   };
 
-  // useEffect(() => {
-  //   setSearch(filterData());
-  // }, [setSearch, filterData]);
+  useEffect(() => {
+    filterData();
+  }, [filterData]);
 
   return (
     <form>
