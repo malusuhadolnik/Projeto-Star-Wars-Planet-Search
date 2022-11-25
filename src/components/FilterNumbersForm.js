@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, useCallback } from 'react';
 import StarWarsContext from '../context/StarWarsContext';
 
 export default function FilterNumbersForm() {
-  const { data, setSearch } = useContext(StarWarsContext);
+  const { setSearch, data } = useContext(StarWarsContext);
   const [numInput, setNumInputs] = useState({
     column: 'population',
     comparison: 'maior que',
@@ -53,14 +53,6 @@ export default function FilterNumbersForm() {
       ...prevState,
       numInput,
     ]));
-
-    // setSearch(filterData());
-
-    // setNumInputs({
-    //   column: 'population',
-    //   comparison: 'maior que',
-    //   value: 0,
-    // });
   };
 
   useEffect(() => {
