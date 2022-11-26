@@ -9,6 +9,8 @@ export default function FilterNumbersForm() {
     value: 0,
   });
   const [selectedFilters, setSelectedFilters] = useState([]);
+  // const [columnOptions, setColumnOptions] = useState(['population',
+  //   'orbital_period', 'diameter', 'rotation_period', 'surface_water']);
 
   const handleChange = ({ target }) => {
     setNumInputs({ ...numInput, [target.name]: target.value });
@@ -47,6 +49,12 @@ export default function FilterNumbersForm() {
   const columnOptions = ['population',
     'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
 
+  const removeOption = (option) => !selectedFilters.find((filter) => { // o retorno é se a opção é igual ou não à chave coluna do filtro (true or false)
+    const teste = option === filter.column;
+    // console.log(teste);
+    return teste;
+  });
+
   return (
     <div>
       <form>
@@ -60,7 +68,7 @@ export default function FilterNumbersForm() {
             onChange={ handleChange }
           >
             {
-              columnOptions.map((option) => (
+              columnOptions.filter(removeOption).map((option) => (
                 <option value={ option } key={ option }>{ option }</option>
               ))
             }
