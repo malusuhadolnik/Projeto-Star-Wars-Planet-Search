@@ -30,7 +30,6 @@ export default function FilterNumbersForm() {
       });
       return filterResults.every((element) => element);
     });
-    console.log(filter);
     return filter;
   }, [data, selectedFilters]);
 
@@ -60,12 +59,17 @@ export default function FilterNumbersForm() {
     return teste;
   });
 
-  // const handleRemoveAFilter = () => {
-  //   setSelectedFilters((prevState) => ([
-  //     ...prevState,
-  //     numInput,
-  //   ]));
-  // };
+  const handleRemoveAFilter = ({ target }) => {
+    const targetColumn = target.value;
+    console.log(targetColumn);
+    const filtered = selectedFilters.filter((filter) => filter.column !== targetColumn);
+    console.log(filtered);
+    setSelectedFilters(filtered);
+  };
+
+  const handleRemoveAllFilters = () => {
+    setSelectedFilters([]);
+  };
 
   return (
     <div>
@@ -114,6 +118,13 @@ export default function FilterNumbersForm() {
         >
           Filtrar
         </button>
+        <button
+          type="button"
+          data-testid="button-remove-filters"
+          onClick={ handleRemoveAllFilters }
+        >
+          Remover todas filtragens
+        </button>
       </form>
       <div>
         <h2>Filtros selecionados</h2>
@@ -125,9 +136,9 @@ export default function FilterNumbersForm() {
               </p>
               <button
                 type="button"
-                // value={ index }
-                // name="value"
-                // onClick={ handleRemoveAFilter }
+                value={ filter.column }
+                name={ filter.column }
+                onClick={ handleRemoveAFilter }
               >
                 Remover este filtro
               </button>
