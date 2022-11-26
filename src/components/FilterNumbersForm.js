@@ -9,8 +9,6 @@ export default function FilterNumbersForm() {
     value: 0,
   });
   const [selectedFilters, setSelectedFilters] = useState([]);
-  // const [columnOptions, setColumnOptions] = useState(['population',
-  //   'orbital_period', 'diameter', 'rotation_period', 'surface_water']);
 
   const handleChange = ({ target }) => {
     setNumInputs({ ...numInput, [target.name]: target.value });
@@ -32,6 +30,7 @@ export default function FilterNumbersForm() {
       });
       return filterResults.every((element) => element);
     });
+    console.log(filter);
     return filter;
   }, [data, selectedFilters]);
 
@@ -40,6 +39,12 @@ export default function FilterNumbersForm() {
       ...prevState,
       numInput,
     ]));
+
+    setNumInputs({
+      column: 'population',
+      comparison: 'maior que',
+      value: 0,
+    });
   };
 
   useEffect(() => {
@@ -54,6 +59,13 @@ export default function FilterNumbersForm() {
     // console.log(teste);
     return teste;
   });
+
+  // const handleRemoveAFilter = () => {
+  //   setSelectedFilters((prevState) => ([
+  //     ...prevState,
+  //     numInput,
+  //   ]));
+  // };
 
   return (
     <div>
@@ -107,9 +119,20 @@ export default function FilterNumbersForm() {
         <h2>Filtros selecionados</h2>
         {
           selectedFilters.map((filter, index) => (
-            <p key={ index }>
-              { `${filter.column} ${filter.comparison} ${filter.value}` }
-            </p>
+            <div key={ index } data-testid="filter">
+              <p>
+                { `${filter.column} ${filter.comparison} ${filter.value}` }
+              </p>
+              <button
+                type="button"
+                // value={ index }
+                // name="value"
+                // onClick={ handleRemoveAFilter }
+              >
+                Remover este filtro
+              </button>
+            </div>
+
           ))
         }
       </div>
