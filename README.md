@@ -5,8 +5,8 @@ Este projeto foi desenvolvido durante o Módulo 2 - Front-End do curso de Desenv
 
 Nesta aplicação, a pessoa usuária pode pesquisar os planetas da franquia Star Wars através de filtros compostos:
 - Filtro por nome do planeta, que atualiza a tabela à medida em que a pessoa usuária digita;
-- Filtros numéricos para as colunas Population, Orbital period, Diameter, Rotation period e Surface water, que podem ser combinados para retornar um resultado mais específico (ex.: Orbital period maior que 400 e Diameter menor que 10000).
-- É possível limpar todos os filtros definidos para que uma nova busca seja realizado
+- Filtros numéricos para as colunas Population, Orbital period, Diameter, Rotation period e Surface water, que podem ser combinados para retornar um resultado mais específico (ex.: Orbital period maior que 400 e Diameter menor que 10000);
+- É possível limpar todos os filtros definidos para que uma nova busca seja realizado.
 
 
 Esta aplicação consome os dados da **The Star Wars API** para realizar a busca por planetas (endpoint:
